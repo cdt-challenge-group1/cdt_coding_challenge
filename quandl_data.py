@@ -20,12 +20,16 @@ def get_quandl_data(daysAgo = None):
 		raise ValueError("Failed to get data")
 	data = data.content
 	
-	returnData = {}
+	returnDates = []
+	returnPrices =  []
 	reader = csv.reader(StringIO(data.decode("UTF-8")))
 	next(reader)
 	for row in reader:
-		returnData[row[0]] = row[1]
+		returnDates.append(row[0])
+		returnPrices.append(float(row[1]))
 	
-	return returnData
+	returnDates.reverse()
+	returnPrices.reverse()
+	return (returnDates, returnPrices)
 
-print(get_quandl_data(30))
+#print(get_quandl_data(30))
