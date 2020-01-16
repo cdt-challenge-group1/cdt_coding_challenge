@@ -18,7 +18,7 @@ def ARIMA_predict():
     data_days = 60
     quandl_data = qd.get_quandl_data(data_days)
     
-    # quandl has missing data do predict extra days
+    # quandl has missing data so predict extra days
     diffDays = pd.date_range(quandl_data[0][-1], pd.datetime.today(), freq=BDay()).size
     print("Predicting %d missing days" % diffDays)
 
@@ -34,7 +34,7 @@ def ARIMA_predict():
     predicted_stdevs = []
     for i in range(diffDays):
         #Forecast the next price
-        price_prediction = fit.forecast()[0][0]
+        price_prediction = round(fit.forecast()[0][0], 2)
         price_std = fit.forecast()[1][0]
         
         datestr = date.date().strftime("%Y-%m-%d")
@@ -42,6 +42,8 @@ def ARIMA_predict():
         quandl_data[1].append(price_prediction)
         predicted_stdevs.append(price_std)
         date += BDay(1)
+        model = ARIMA(quandl_data[1], order=order)
+        fit = model.fit()
     
     #Forecast the next price
     price_prediction = fit.forecast()[0][0]
