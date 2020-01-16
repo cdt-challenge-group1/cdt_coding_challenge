@@ -1,5 +1,4 @@
 from ARIMA_implementation_rough import ARIMA_predict
-import logging
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas.tseries.offsets import BDay, DateOffset
@@ -7,11 +6,9 @@ from pandas.tseries.offsets import BDay, DateOffset
 DELAY_COST = 30000
 NUM_BARRELS = 750000
 
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-
 if __name__ == "__main__":
     price_prediction, price_std, prices, predicted_stdevs = ARIMA_predict()
-    print(price_prediction, prices)
+    print('Price today:', prices[-1], 'Predicted price tomorrow:', price_prediction)
     price_today = prices[1][-1]
 
     # For now, we check only 1 day ahead, so if today's price is higher, dock today
@@ -23,10 +20,12 @@ if __name__ == "__main__":
     else:
         dock_today = True
 
+    print('~~~~~~~~~~~~~~~~~~~~~~')
     if dock_today:
-        logging.info('The boat should dock today')
+        print('The boat should dock today')
     else:
-        logging.info('The boat should wait to dock')
+        print('The boat should wait to dock')
+    print('~~~~~~~~~~~~~~~~~~~~~~')
 
     ys = prices[1] + [price_prediction]
     xs = prices[0] + [(pd.datetime.today() + BDay(1)).strftime("%Y-%m-%d")]
@@ -35,4 +34,7 @@ if __name__ == "__main__":
     plt.figure(figsize=(20,10))
     plt.errorbar(xs, ys, yerr=errors, elinewidth=2)
     plt.xticks(rotation=70)
-    plt.savefig("out.png")
+    plt.ylabel('Prices')
+    plt.xlabel('Date')
+    plt.title('Predicted Oil Prices')
+    plt.savefig("prediction_graph_output.png")
