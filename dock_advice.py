@@ -8,7 +8,7 @@ NUM_BARRELS = 750000
 
 if __name__ == "__main__":
     price_prediction, price_std, prices, predicted_stdevs = ARIMA_predict()
-    print('Price today:', prices[-1], 'Predicted price tomorrow:', price_prediction)
+    print('Price today:', prices[-1][-1], 'Predicted price tomorrow:', price_prediction)
     price_today = prices[1][-1]
 
     # For now, we check only 1 day ahead, so if today's price is higher, dock today
