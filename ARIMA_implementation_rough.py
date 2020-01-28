@@ -9,14 +9,15 @@ Created on Thu Nov 21 09:45:37 2019
 import pandas as pd
 from statsmodels.tsa.arima_model import ARIMA
 import matplotlib.pyplot as plt
-import quandl_data as qd
+#import quandl_data as dt
+import yahoo_data as dt
 from pandas.tseries.offsets import BDay, DateOffset
 
 def ARIMA_predict():
     #import the data set into a pandas DataFrame
     #data = pd.read_csv('Insert name of data path', index_col=0)
     data_days = 60
-    quandl_data = qd.get_quandl_data(data_days)
+    quandl_data = dt.get_yahoo_data(data_days)
     
     # quandl has missing data so predict extra days
     diffDays = pd.date_range(quandl_data[0][-1], pd.datetime.today(), freq=BDay()).size
