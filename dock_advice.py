@@ -31,10 +31,10 @@ if __name__ == "__main__":
     xs = prices[0] + [(pd.datetime.today() + BDay(1)).strftime("%Y-%m-%d")]
     
     errors = ([0] * (len(prices[0]) - len(predicted_stdevs))) + predicted_stdevs + [price_std]
-    plt.figure(figsize=(20,10))
+    fig = plt.figure(figsize=(20,10))
     plt.errorbar(xs, ys, yerr=errors, elinewidth=2)
     plt.xticks(rotation=70)
     plt.ylabel('Prices')
     plt.xlabel('Date')
     plt.title('Predicted Oil Prices')
-    plt.savefig("prediction_graph_output.png")
+    plt.savefig("prediction_graph_output.png", dpi=200)

@@ -10,24 +10,22 @@ import pandas as pd
 from statsmodels.tsa.arima_model import ARIMA
 import matplotlib.pyplot as plt
 #import quandl_data as dt
-import yahoo_data as dt
+#import yahoo_data as dt
 from pandas.tseries.offsets import BDay, DateOffset
+import update_data as dt
 
 def ARIMA_predict():
-    #import the data set into a pandas DataFrame
-    #data = pd.read_csv('Insert name of data path', index_col=0)
-    data_days = 60
-    quandl_data = dt.get_yahoo_data(data_days)
+    data = dt.getData()
     
-    # quandl has missing data so predict extra days
-    diffDays = pd.date_range(quandl_data[0][-1], pd.datetime.today(), freq=BDay()).size
+    # data has missing data so predict extra days
+    diffDays = pd.date_range(data[0][-1], pd.datetime.today(), freq=BDay()).size
     print("Predicting %d missing days" % diffDays)
 
     # predict the missing number of days and then the current day so that the prediction is for tomorrow not
     # for the day after the data has days for
     #Initialise the parameters for the ARIMA model (p,d,q).
     order = (5,1,0)
-    model = ARIMA(quandl_data[1], order=order)
+    model = ARIMA(data[1], order=order)
 
     #Fit the model to the data provided
     fit = model.fit()
@@ -39,16 +37,21 @@ def ARIMA_predict():
         price_std = fit.forecast()[1][0]
         
         datestr = date.date().strftime("%Y-%m-%d")
-        quandl_data[0].append(datestr)
-        quandl_data[1].append(price_prediction)
+        data[0].append(datestr)
+        data[1].append(price_prediction)
         predicted_stdevs.append(price_std)
         date += BDay(1)
-        model = ARIMA(quandl_data[1], order=order)
+        model = ARIMA(data[1], order=order)
         fit = model.fit()
     
     #Forecast the next price
+    datestr = date.date().strftime("%Y-%m-%d")
+    price_prediction = round(fit.forecast()[0][0], 2)
+    price_std = fit.forecast()[1][0]
     price_prediction = fit.forecast()[0][0]
-    price_std = fit.forecast()[1]
+    data[0].append(datestr)
+    data[1].append(price_prediction)
+    predicted_stdevs.append(price_std)
         
-    return price_prediction, price_std[0], quandl_data, predicted_stdevs
+    return price_prediction, price_std, data, predicted_stdevs
 
