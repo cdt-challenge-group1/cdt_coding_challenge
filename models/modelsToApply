@@ -1,0 +1,391 @@
+import time
+
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+from sklearn.svm import SVC
+from sklearn import linear_model
+from sklearn.metrics import accuracy_score
+from sklearn import svm
+from sklearn.datasets import make_moons, make_blobs
+from sklearn.covariance import EllipticEnvelope
+from sklearn.ensemble import IsolationForest
+from sklearn.neighbors import LocalOutlierFactor
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import roc_auc_score
+from sklearn.decomposition import PCA
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import GridSearchCV
+from sklearn import metrics
+from sklearn.naive_bayes import GaussianNB
+from keras.models import Sequential
+from keras.layers import Dense
+from scipy.optimize import differential_evolution
+
+from sklearn.svm import SVC, NuSVC, LinearSVC
+from sklearn.neighbors import KNeighborsClassifier
+
+
+
+
+calldataset = DATASET()
+#df = dataframe
+df = pd.DataFrame(np.c_[calldataset['data'], calldataset['target']],
+columns= np.append(calldataset['feature_names'], ['target']))
+mean = list(df.columns[??:??]) #define mean for the necessary columns
+X = df.loc[:,mean] #mean of Z columns from bc dataset set as X
+y = df.loc[:, 'target']
+
+#integration of PCA components
+def __init__(self, n_components=None, copy=True, whiten=False,
+             svd_solver='auto', tol=0.0, iterated_power='auto',
+             random_state=None):
+    self.n_components = n_components
+    self.copy = copy
+    self.whiten = whiten
+    self.svd_solver = svd_solver
+    self.tol = tol
+    self.iterated_power = iterated_power
+    self.random_state = random_state
+
+
+pca = PCA(n_components=2) #altering above variable declaration
+pca = pca.fit_transform(X)
+
+
+plt.figure(figsize = (9,5))
+plt.scatter(pca[:,0],pca[:,1], c = df['target'], cmap = "RdBu_r", edgecolor = "Red", alpha=0.35)
+plt.colorbar()
+plt.title('PCA Scatter Plot')
+
+
+
+df.replace(to_replace={'target': {0: calldataset.target_names[0]}}, inplace=True)
+df.replace(to_replace={'target': {1: calldataset.target_names[1]}}, inplace=True)
+
+#pca.replace(to_replace={'target': {0: cancer.target_names[0]}}, inplace=True)
+#pca.replace(to_replace={'target': {1: cancer.target_names[1]}}, inplace=True)
+#df['Target'] = pd.Series(data=cancer.target, index=df.index)
+
+diagnosis_all = list(df.shape)[0]
+diagnosis_categories = list(df['target'].value_counts())
+
+#diagnosis_all = list(pca.shape)[0]
+#diagnosis_categories = list(pca['target'].value_counts())
+
+print("\n \t The data has {} diagnosis, {} malignant and {} benign.".format(diagnosis_all,
+                                                                                 diagnosis_categories[0],
+                                                                                 diagnosis_categories[1]))
+
+print(df)
+
+
+plt.figure(figsize=(15, 15))
+
+for i, feature in enumerate(mean):
+    rows = int(len(mean) / 2)
+
+    plt.subplot(rows, 2, i + 1)
+
+    sns.boxplot(x='target', y=feature, data=df, palette="Set2")
+
+plt.tight_layout()
+plt.show()
+
+
+plt.subplot(1,3,1)
+plt.scatter(df['mean perimeter'], df['mean radius'], s=df['worst area']*0.05, color='pink', label='check', alpha=0.3)
+plt.xlabel('Mean Perimeter',fontsize=14)
+plt.ylabel('Mean Radius',fontsize=14)
+
+plt.subplot(1,3,2)
+plt.scatter(df['mean radius'], df['mean concave points'], s=df['mean area']*0.05, color='magenta', label='check', alpha=0.3)
+plt.xlabel('Mean Radius',fontsize=14)
+plt.ylabel('Mean Concave Points',fontsize=14)
+plt.tight_layout()
+
+plt.subplot(1,3,3)
+plt.scatter(df['target'], df['mean perimeter'], s=df['mean area']*0.05, color='purple', label='check', alpha=0.3)
+plt.xlabel('Diagnosis',fontsize=14)
+plt.ylabel('Mean Perimeter',fontsize=14)
+plt.tight_layout()
+plt.show()
+
+
+features_selection = ['radius_mean', 'perimeter_mean', 'area_mean', 'concavity_mean', 'concave_points_mean']
+
+#X = df.loc[:,mean]
+#y = df.loc[:, 'target']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.15, random_state = 42)
+
+cvs_all = []
+accuracy_all = []
+
+
+
+
+start = time.time()
+
+parameters = {'priors':[[0.35, 0.65]]}
+#[0.01, 0.99],[0.1, 0.9], [0.2, 0.8], [0.25, 0.75], [0.3, 0.7],[0.35, 0.65], [0.4, 0.6]
+clf = GridSearchCV(GaussianNB(), parameters)
+clf.fit(X_train, y_train)
+prediction = clf.predict(X_test)
+k_scores = cross_val_score(clf, X, y, cv=5)
+
+end = time.time()
+
+accuracy_all.append(accuracy_score(prediction, y_test))
+cvs_all.append(np.mean(k_scores))
+
+print("Naive Bayes Accuracy: {0:.2%}".format(accuracy_score(prediction, y_test)))
+print("Cross validation score: {0:.2%} (+/- {1:.2%})".format(np.mean(k_scores), np.std(k_scores)*2))
+print("Error: {0:.3%}".format(1-(accuracy_score(prediction, y_test))))
+print("Execution time: {0:.5} seconds \n".format(end-start))
+
+print("Best parameters: {0}".format(clf.best_params_))
+
+
+
+start = time.time()
+
+model1 = KNeighborsClassifier()
+
+params = {'n_neighbors':[5],
+          'leaf_size':[30],
+          'weights':['uniform'],
+          'algorithm':['ball_tree'],
+          'n_jobs':[-1]}
+
+model1 = GridSearchCV(model1, param_grid=params, n_jobs=1)
+model1.fit(X_train,y_train)
+prediction=model1.predict(X_test)
+k_scores = cross_val_score(model1, X, y, cv=5)
+
+accuracy_all.append(accuracy_score(prediction, y_test))
+cvs_all.append(np.mean(k_scores))
+
+print("ball KNeighbors Accuracy: {0:.3%}".format(accuracy_score(prediction, y_test)))
+print("Cross validation score: {0:.3%} (+/- {1:.3%})".format(np.mean(k_scores), np.std(k_scores)*2))
+print("Error: {0:.3%}".format(1-(accuracy_score(prediction, y_test))))
+
+
+
+#best KNN model implementation - see documentation of comparison
+start = time.time()
+
+model1 = KNeighborsClassifier()
+
+params = {'n_neighbors':[5],
+          'leaf_size':[30],
+          'weights':['uniform'],
+          'algorithm':['kd_tree'],
+          'n_jobs':[-1]}
+
+model1 = GridSearchCV(model1, param_grid=params, n_jobs=1)
+model1.fit(X_train,y_train)
+prediction=model1.predict(X_test)
+k_scores = cross_val_score(model1, X, y, cv=5)
+
+accuracy_all.append(accuracy_score(prediction, y_test))
+cvs_all.append(np.mean(k_scores))
+
+print("kd KNeighbors Accuracy: {0:.3%}".format(accuracy_score(prediction, y_test)))
+print("Cross validation score: {0:.3%} (+/- {1:.3%})".format(np.mean(k_scores), np.std(k_scores)*2))
+print("Error: {0:.3%}".format(1-(accuracy_score(prediction, y_test))))
+
+
+start = time.time()
+
+model1 = KNeighborsClassifier()
+
+params = {'n_neighbors':[5],
+          'leaf_size':[30],
+          'weights':['uniform'],
+          'algorithm':['brute'],
+          'n_jobs':[-1]}
+
+model1 = GridSearchCV(model1, param_grid=params, n_jobs=1)
+model1.fit(X_train,y_train)
+prediction=model1.predict(X_test)
+k_scores = cross_val_score(model1, X, y, cv=5)
+
+accuracy_all.append(accuracy_score(prediction, y_test))
+cvs_all.append(np.mean(k_scores))
+
+print("brute KNeighbors Accuracy: {0:.3%}".format(accuracy_score(prediction, y_test)))
+print("Cross validation score: {0:.3%} (+/- {1:.3%})".format(np.mean(k_scores), np.std(k_scores)*2))
+print("Error: {0:.3%}".format(1-(accuracy_score(prediction, y_test))))
+
+
+
+start = time.time()
+
+clf = SVC()
+clf.fit(X_train, y_train)
+prediction=clf.predict(X_test)
+k_scores = cross_val_score(clf, X, y, cv=5)
+
+end = time.time()
+
+accuracy_all.append(accuracy_score(prediction, y_test))
+cvs_all.append(np.mean(k_scores))
+
+print("SVC Accuracy: {0:.3%}".format(accuracy_score(prediction, y_test)))
+print("Cross validation score: {0:.3%} (+/- {1:.3%})".format(np.mean(k_scores), np.std(k_scores)*2))
+print("Error: {0:.3%}".format(1-(accuracy_score(prediction, y_test))))
+print("Execution time: {0:.5} seconds \n".format(end-start))
+
+
+
+
+start = time.time()
+
+#declare SVC variables
+def __init__(self, epsilon=0.0, tol=1e-4, C=1.0,
+             loss='epsilon_insensitive', fit_intercept=True,
+             intercept_scaling=1., dual=True, verbose=0,
+             random_state=None, max_iter=1000):
+    self.tol = tol
+    self.C = C
+    self.epsilon = epsilon
+    self.fit_intercept = fit_intercept
+    self.intercept_scaling = intercept_scaling
+    self.verbose = verbose
+    self.random_state = random_state
+    self.max_iter = max_iter
+    self.dual = dual
+    self.loss = loss
+
+
+
+clf = LinearSVC(max_iter=1000)
+clf.fit(X_train, y_train)
+prediction = clf.predict(X_test)
+l_scores = cross_val_score(clf, X, y, cv=5)
+
+end = time.time()
+
+accuracy_all.append(accuracy_score(prediction, y_test))
+cvs_all.append(np.mean(l_scores))
+
+print("LinearSVC Accuracy: {0:.3%}".format(accuracy_score(prediction, y_test)))
+print("Cross validation score: {0:.3%} (+/- {1:.3%})".format(np.mean(l_scores), np.std(l_scores)*2))
+print("Error: {0:.3%}".format(1-(accuracy_score(prediction, y_test))))
+print("Execution time: {0:.5} seconds \n".format(end-start))
+
+
+
+
+
+#combined
+
+
+start = time.time()
+
+clf = GaussianNB()
+clf.fit(X_train, y_train)
+prediction=clf.predict(X_test)
+k_scores = cross_val_score(clf, X, y, cv=5)
+
+
+input = X, y
+
+clf2 = LinearSVC()
+clf2.fit(X, y)
+prediction=clf2.predict(X_test)
+new_k_scores = cross_val_score(clf2, X, y, cv=5)
+end = time.time()
+
+accuracy_all.append(accuracy_score(prediction, y_test))
+cvs_all.append(np.mean(new_k_scores))
+
+print("GausNB and SVC Accuracy: {0:.3%}".format(accuracy_score(prediction, y_test)))
+print("Cross validation score: {0:.3%} (+/- {1:.3%})".format(np.mean(new_k_scores), np.std(new_k_scores)*2))
+print("Error: {0:.3%}".format(1-(accuracy_score(prediction, y_test))))
+print("Execution time: {0:.5} seconds \n".format(end-start))
+
+
+
+"""def schwefel(X):
+    y = 0
+    sum = 0
+    sum += X[i]*np.sin(np.sqrt(np.absolute(X[i])))
+    bounds = [(-500, 500), (-500, 500)]
+    result = differential_evolution(michalewicz(sum), bounds)
+    result.X, result.fun
+"""
+
+#ARTIFICIAL NEURAL NETWORK
+start = time.time()
+
+clf3 = Sequential() # Initialising the ANN
+
+
+clf3.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu', input_dim = 10))
+clf3.add(Dense(units = 3, kernel_initializer = 'uniform', activation = 'relu'))
+clf3.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+
+clf3.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+
+clf3.fit(X_train, y_train, batch_size = 1, epochs = 50)
+
+y_pred = clf3.predict(X_test)
+y_pred = [ 0 if y < 0.5 else 1 for y in y_pred ]
+
+end = time.time()
+acc = confusion_matrix(y_test, y_pred)
+
+
+accuracy = (acc[0][0] + acc[1][1]) / (acc[0][0] + acc[0][1] + acc[1][0] + acc[1][1])
+print("acc: "+ str(accuracy*100)+"%") #*100 due to formation of output (decimals)
+print("Execution time: {0:.5} seconds \n".format(end-start))
+
+
+
+
+
+#the confusion matrix code for plotting that I used can be found at - https://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
+def plot_confusion_matrix(y_true, y_pred, classes,
+                          normalize=False,
+                          title=None,
+                          cmap=plt.cm.Blues):
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(acc, interpolation='nearest', cmap=cmap)
+    ax.figure.colorbar(im, ax=ax)
+    # We want to show all ticks...
+    ax.set(xticks=np.arange(acc.shape[1]),
+       yticks=np.arange(acc.shape[0]),
+       # ... and label them with the respective list entries
+       xticklabels=classes, yticklabels=classes,
+       title=title,
+       ylabel='True label',
+       xlabel='Predicted label')
+
+
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+         rotation_mode="anchor")
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+             rotation_mode="anchor")
+
+    fmt = '.2f' if normalize else 'd'
+    thresh = acc.max() / 2.
+    for i in range(acc.shape[0]):
+        for j in range(acc.shape[1]):
+            ax.text(j, i, format(acc[i, j], fmt),
+                    ha="center", va="center",
+                    color="white" if acc[i, j] > thresh else "black")
+    fig.tight_layout()
+    return ax
+
+plot_confusion_matrix(y_test, y_pred, classes = cancer['target_names'], normalize=True,
+                      title='Confusion matrix')
+
+plt.show()
+
