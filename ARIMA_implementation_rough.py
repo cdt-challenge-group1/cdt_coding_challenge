@@ -36,7 +36,7 @@ def ARIMA_predict():
         price_prediction = round(fit.forecast()[0][0], 2)
         price_std = fit.forecast()[1][0]
         
-        datestr = date.date().strftime("%Y-%m-%d")
+        datestr = date.date()#.strftime("%Y-%m-%d")
         data[0].append(datestr)
         data[1].append(price_prediction)
         predicted_stdevs.append(price_std)
@@ -45,13 +45,13 @@ def ARIMA_predict():
         fit = model.fit()
     
     #Forecast the next price
-    datestr = date.date().strftime("%Y-%m-%d")
+    datestr = date.date()#.strftime("%Y-%m-%d")
     price_prediction = round(fit.forecast()[0][0], 2)
     price_std = fit.forecast()[1][0]
     price_prediction = fit.forecast()[0][0]
     data[0].append(datestr)
     data[1].append(price_prediction)
     predicted_stdevs.append(price_std)
-        
+    
     return price_prediction, price_std, data, predicted_stdevs
 

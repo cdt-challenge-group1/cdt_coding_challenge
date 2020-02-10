@@ -35,7 +35,4 @@ def get_yahoo_data(daysAgo = None):
 		close.append(float(value))
 		index += 1
 
-	print(len(dates), len(close))
 	return (dates, close)
-
-#print(get_yahoo_data(30))

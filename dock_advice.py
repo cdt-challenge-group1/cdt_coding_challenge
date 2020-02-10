@@ -1,7 +1,10 @@
+#!/usr/bin/python3
+
 from ARIMA_implementation_rough import ARIMA_predict
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas.tseries.offsets import BDay, DateOffset
+import datetime
 
 DELAY_COST = 30000
 NUM_BARRELS = 750000
@@ -28,11 +31,12 @@ if __name__ == "__main__":
     print('~~~~~~~~~~~~~~~~~~~~~~')
 
     ys = prices[1] + [price_prediction]
-    xs = prices[0] + [(pd.datetime.today() + BDay(1)).strftime("%Y-%m-%d")]
+    xs = prices[0] + [(datetime.datetime.today() + BDay(1))]
     
     errors = ([0] * (len(prices[0]) - len(predicted_stdevs))) + predicted_stdevs + [price_std]
     fig = plt.figure(figsize=(20,10))
-    plt.errorbar(xs, ys, yerr=errors, elinewidth=2)
+    print([x.strftime("%Y-%m-%d") for x in xs[-10:]])
+    plt.errorbar([x.strftime("%Y-%m-%d") for x in xs[-10:]], ys[-10:], yerr=errors[-10:], elinewidth=2, uplims=True, lolims=True, ecolor="red")
     plt.xticks(rotation=70)
     plt.ylabel('Prices')
     plt.xlabel('Date')

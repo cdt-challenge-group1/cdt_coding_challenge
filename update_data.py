@@ -6,6 +6,7 @@ from os import path
 import pickle
 import pandas as pd
 from pandas.tseries.offsets import BDay, DateOffset
+import datetime
 
 def updateData():
 	data = None
@@ -19,11 +20,17 @@ def updateData():
 		data = pickle.load(f)
 	f.close()
 
-	diff_days = pd.date_range(data[0][-1], pd.datetime.today(), freq=BDay()).size
-	yahoo_data = yahoo.get_yahoo_data(diff_days)
-	dates = data[0] + yahoo_data[0]
-	close = data[1] + yahoo_data[1]
-	data = (dates, close)
+	print(data[0][-1])
+	diff_days = pd.date_range(data[0][-1], datetime.datetime.today(), freq=BDay()).size
+
+	print(diff_days)
+	if diff_days - 1 > 0:
+		yahoo_data = yahoo.get_yahoo_data(diff_days)
+		print(yahoo_data)
+		dates = data[0] + yahoo_data[0]
+		print(dates[-10:])
+		close = data[1] + yahoo_data[1]
+		data = (dates, close)
 
 	with open("data.dat", "wb") as f:
 		pickle.dump(data, f)
