@@ -53,5 +53,3 @@ def requestData(daysAgo = None):
 			close.append(float(sheet.cell(row_idx, 1).value))
 
 	return (dates, close)
-
-print(requestData(30))
