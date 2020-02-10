@@ -16,6 +16,7 @@ def get_yahoo_data(daysAgo = None):
 	data = requests.get(yahoo_url)
 	if data.status_code != 200:
 		raise ValueError("Failed to get data")
+	print("Yahoo data is %d bytes" % len(data.content))
 	data = json.loads(data.content)
 
 	response = data["chart"]["result"][0]

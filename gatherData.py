@@ -21,6 +21,7 @@ def requestData(daysAgo = None):
 	data = requests.get(url)
 	if data.status_code != 200:
 		raise ValueError("Failed to get data")
+	print("ENI data is %d bytes" % (len(data.content)))
 
 	"""# https://www.scrapehero.com/how-to-fake-and-rotate-user-agents-using-python-3/
 	user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'

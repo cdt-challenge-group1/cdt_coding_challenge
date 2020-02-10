@@ -27,6 +27,8 @@ def updateData():
 		dates = data[0] + yahoo_data[0]
 		close = data[1] + yahoo_data[1]
 		data = (dates, close)
+	else:
+		print("Nothing to update")
 
 	with open("data.dat", "wb") as f:
 		pickle.dump(data, f)
