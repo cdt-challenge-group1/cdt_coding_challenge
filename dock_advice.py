@@ -10,9 +10,10 @@ DELAY_COST = 30000
 NUM_BARRELS = 750000
 
 if __name__ == "__main__":
-    price_prediction, price_std, prices, predicted_stdevs = ARIMA_predict()
-    print('Price today:', prices[-1][-1], 'Predicted price tomorrow:', price_prediction)
-    price_today = prices[1][-1]
+    prices, predicted_stdevs = ARIMA_predict()
+    print('Price today:', prices[1][-2], 'Predicted price tomorrow:', prices[1][-1])
+    price_today = prices[1][-2]
+    price_prediction = prices[1][-1]
 
     # For now, we check only 1 day ahead, so if today's price is higher, dock today
     if price_today >= price_prediction:
@@ -33,7 +34,7 @@ if __name__ == "__main__":
     ys = prices[1]
     xs = prices[0]
     
-    errors = ([0] * (len(prices[0]) - len(predicted_stdevs))) + predicted_stdevs + [price_std]
+    errors = ([0] * (len(prices[0]) - len(predicted_stdevs))) + predicted_stdevs
     fig = plt.figure(figsize=(20,10))
     #print([x.strftime("%Y-%m-%d") for x in xs[-10:]])
     plt.errorbar([x.strftime("%Y-%m-%d") for x in xs[-10:]], ys[-10:], yerr=errors[-10:], elinewidth=2, uplims=True, lolims=True, ecolor="red")

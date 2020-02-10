@@ -53,5 +53,5 @@ def ARIMA_predict():
     data[1].append(price_prediction)
     predicted_stdevs.append(price_std)
     
-    return price_prediction, price_std, data, predicted_stdevs
+    return data, predicted_stdevs
 
