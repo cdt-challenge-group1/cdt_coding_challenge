@@ -20,15 +20,11 @@ def updateData():
 		data = pickle.load(f)
 	f.close()
 
-	print(data[0][-1])
 	diff_days = pd.date_range(data[0][-1], datetime.datetime.today(), freq=BDay()).size
 
-	print(diff_days)
 	if diff_days - 1 > 0:
 		yahoo_data = yahoo.get_yahoo_data(diff_days)
-		print(yahoo_data)
 		dates = data[0] + yahoo_data[0]
-		print(dates[-10:])
 		close = data[1] + yahoo_data[1]
 		data = (dates, close)
 
