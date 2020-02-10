@@ -30,12 +30,12 @@ if __name__ == "__main__":
         print('The boat should wait to dock')
     print('~~~~~~~~~~~~~~~~~~~~~~')
 
-    ys = prices[1] + [price_prediction]
-    xs = prices[0] + [(datetime.datetime.today() + BDay(1))]
+    ys = prices[1]
+    xs = prices[0]
     
     errors = ([0] * (len(prices[0]) - len(predicted_stdevs))) + predicted_stdevs + [price_std]
     fig = plt.figure(figsize=(20,10))
-    print([x.strftime("%Y-%m-%d") for x in xs[-10:]])
+    #print([x.strftime("%Y-%m-%d") for x in xs[-10:]])
     plt.errorbar([x.strftime("%Y-%m-%d") for x in xs[-10:]], ys[-10:], yerr=errors[-10:], elinewidth=2, uplims=True, lolims=True, ecolor="red")
     plt.xticks(rotation=70)
     plt.ylabel('Prices')
