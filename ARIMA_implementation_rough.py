@@ -24,7 +24,7 @@ def ARIMA_predict():
     # predict the missing number of days and then the current day so that the prediction is for tomorrow not
     # for the day after the data has days for
     #Initialise the parameters for the ARIMA model (p,d,q).
-    order = (5,1,0)
+    order = (1,1,1)
     model = ARIMA(data[1], order=order)
 
     #Fit the model to the data provided
