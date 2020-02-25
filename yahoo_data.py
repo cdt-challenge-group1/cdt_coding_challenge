@@ -19,8 +19,6 @@ def get_yahoo_data(daysAgo = None):
 		raise ValueError("Failed to fetch yahoo finance page to find chart")
 	print("Yahoo finance page is %d bytes" % len(data.content))
 	
-	# TODO: what if this match fails?
-	print(data.content.decode("UTF-8"))
 	chart_matches = yahoo_chart_regex.search(data.content.decode("UTF-8"))
 	if chart_matches == None:
 		raise ValueError("Failed to match chart name regex")
