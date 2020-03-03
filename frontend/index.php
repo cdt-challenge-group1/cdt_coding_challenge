@@ -1,4 +1,4 @@
 <?php
 
-echo php_info();
+echo phpinfo();
 
