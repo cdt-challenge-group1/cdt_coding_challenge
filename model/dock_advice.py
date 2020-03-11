@@ -19,27 +19,33 @@ if __name__ == "__main__":
     if price_today >= price_prediction:
         dock_today = True
     # If the prediction is higher, check whether the delay cost is worth it
-    elif (price_prediction * NUM_BARRELS) + DELAY_COST > (price_today * NUM_BARRELS):
+    elif (price_prediction * NUM_BARRELS) - DELAY_COST > (price_today * NUM_BARRELS):
         dock_today = False
     else:
         dock_today = True
 
     print('~~~~~~~~~~~~~~~~~~~~~~')
     if dock_today:
-        print('The boat should dock today')
+        advice = 'The boat should dock today'        
+        
     else:
-        print('The boat should wait to dock')
+        advice = 'The boat should wait to dock'
+    print(advice)
     print('~~~~~~~~~~~~~~~~~~~~~~')
 
     ys = prices[1]
     xs = prices[0]
+    
+    textout = '\n'.join((r"Today's price=%.2f" %price_today,r"Tomorrow's prediction=%.2f" %price_prediction,advice))
     
     errors = ([0] * (len(prices[0]) - len(predicted_stdevs))) + predicted_stdevs
     fig = plt.figure(figsize=(20,10))
     #print([x.strftime("%Y-%m-%d") for x in xs[-10:]])
     plt.errorbar([x.strftime("%Y-%m-%d") for x in xs[-10:]], ys[-10:], yerr=errors[-10:], elinewidth=2, uplims=True, lolims=True, ecolor="red")
     plt.xticks(rotation=70)
-    plt.ylabel('Prices')
+    plt.ylabel('Price (USD/Barrel)')
     plt.xlabel('Date')
-    plt.title('Predicted Oil Prices')
+    plt.title('Predicted Oil Price')
     plt.savefig("prediction_graph_output.png", dpi=200)
+    plt.text(([x.strftime("%Y-%m-%d") for x in xs[-10:]][-2]),(price_prediction+3),textout)
+    plt.show()
