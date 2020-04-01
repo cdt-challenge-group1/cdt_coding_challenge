@@ -11,6 +11,6 @@ if (isset($_GET["run"])) {
 	?>
 	<a href=".?run">Re-run</a><br/>
 	<br/>
-	<img src="prediction_graph_output.svg" width="100%" height="100%" />
+	<img src="prediction_graph_output.svg" width="100%" height="80%" />
 	<?php
 }
