@@ -46,6 +46,5 @@ if __name__ == "__main__":
     plt.ylabel('Price (USD/Barrel)')
     plt.xlabel('Date')
     plt.title('Predicted Oil Price')
-    plt.savefig("prediction_graph_output.png", dpi=200)
     plt.text(([x.strftime("%Y-%m-%d") for x in xs[-10:]][-2]),(price_prediction+3),textout)
-    plt.show()
+    plt.savefig("prediction_graph_output.svg", dpi=200)
