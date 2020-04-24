@@ -8,5 +8,5 @@ sudo service apache2 restart &&
 sudo mkdir -p /var/www/html/cdt/ &&
 cp -R . /var/www/html/cdt/ &&
 sudo chown -R www-data:www-data /var/www &&
-sudo pip3 install -r model/requirements.txt &&
-wget -O /dev/null -o /dev/null 127.0.0.1?run 2>&1 /dev/null
+sudo pip3 install -r model/requirements.txt
+#wget -O /dev/null -o /dev/null 127.0.0.1?run 2>&1 /dev/null
