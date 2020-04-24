@@ -1,4 +1,5 @@
 __pycache__
 *.png
+*.svg
 data.dat
 *.pyc

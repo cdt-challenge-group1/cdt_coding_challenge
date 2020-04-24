@@ -7,16 +7,10 @@ if (isset($_GET["run"])) {
 	$shouldDock = $matches[1] == "should";*/
 	
 	?><pre><?php echo $output; ?></pre><?php
-} else if (isset($_GET["graph"])) {
-	/*$data = file_get_contents("prediction_graph_output.png") or die("Failed to get graph");
-	echo $data;
-	die();*/
-	?>
-	<img src="prediction_graph_output.png" />
-	<?php
 } else {
 	?>
-	<a href=".?run">Run</a><br/>
-	<a href=".?graph">Graph (run first, large download)</a>
+	<a href=".?run">Re-run</a><br/>
+	<br/>
+	<img src="prediction_graph_output.svg" width="100%" height="80%" />
 	<?php
 }
