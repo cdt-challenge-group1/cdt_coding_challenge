@@ -1,7 +1,7 @@
 <?php
 
 if (isset($_GET["run"])) {
-	$output = shell_exec("python3 " . __DIR__ . "/../model/dock_advice.py 2>/dev/null");
+	$output = shell_exec("NLTK_DATA=/usr/local/share/nltk_data python3 " . __DIR__ . "/../model/dock_advice.py 2>/dev/null");
 	/*$matches;
 	preg_match("/^The boat should (.*) today$/", $output, $matches);
 	$shouldDock = $matches[1] == "should";*/
