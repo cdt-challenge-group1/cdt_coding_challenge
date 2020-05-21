@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from ARIMA_implementation_rough import ARIMA_predict
+from headlines import collect_and_analyse_headlines
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas.tseries.offsets import BDay, DateOffset
@@ -10,6 +11,8 @@ DELAY_COST = 30000
 NUM_BARRELS = 750000
 
 if __name__ == "__main__":
+    headlines = collect_and_analyse_headlines()
+
     prices, predicted_stdevs = ARIMA_predict()
     print('Price today:', prices[1][-2], 'Predicted price tomorrow:', prices[1][-1])
     price_today = prices[1][-2]
