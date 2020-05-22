@@ -1,5 +1,7 @@
 # cdt_coding_challenge
 
+[![Build Status](https://travis-ci.com/cdt-challenge-group1/cdt_coding_challenge.svg?branch=master)](https://travis-ci.com/cdt-challenge-group1/cdt_coding_challenge)
+
 ## setup
 
 ```
