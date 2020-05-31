@@ -10,5 +10,24 @@ def test_nextDayIsPredicted():
     data = getData()
     arima_data = ARIMA_predict()
     
-    print(data[0][-10:])
     assert (len(data[0]) + 1) == len(arima_data[0][0])
+
+"""
+Test that the same number of standard deviations are returned as there
+are days that were predicted in the data
+"""
+def test_sameNumberOfStdevsAsDays():
+    data = getData()
+    arima_data = ARIMA_predict()
+    
+    assert (len(arima_data[0][0]) -\
+        len(data[0])) == len(arima_data[1])
+
+"""
+Test that the same number of prices are returned in the arima data
+as there are days that are returned
+"""
+def test_sameNumberOfPricesAsDays():
+    data = ARIMA_predict()
+    
+    assert len(data[0][0]) == len(data[0][1])
