@@ -11,4 +11,4 @@ def test_nextDayIsPredicted():
     arima_data = ARIMA_predict()
     
     print(data[0][-10:])
-    assert (len(data[0]) + 1) == len(arima_data[0])
+    assert (len(data[0]) + 1) == len(arima_data[0][0])
