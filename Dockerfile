@@ -19,7 +19,7 @@ RUN sudo chmod +x /setup.sh
 RUN sudo chmod +x /docker-entrypoint.sh
 RUN sudo bash -c 'cd /source && bash /setup.sh'
 RUN sudo apt install cron
-RUN sudo sh -c "echo '0 0 * * * wget -O /dev/null -o /dev/null localhost?run' >> /etc/crontab"
+RUN sudo sh -c "echo '0  0    * * *   root    wget -O /dev/null -o /dev/null localhost?run' >> /etc/crontab"
 
 #CMD sudo service apache2 start
 #CMD wget -O /dev/null -o /dev/null localhost
