@@ -14,7 +14,7 @@ def get_yahoo_data(daysAgo=None):
     # TODO: consider caching the url and only updating it when the fetch
     # fails with a 404.
 
-    yahoo_chart_regex = re.compile("\"underlyingSymbol\":\"(.*?\.NYM)\"")
+    yahoo_chart_regex = re.compile("\"underlyingSymbol\":\"(.*?.NYM)\"")
     data = requests.get("https://finance.yahoo.com/quote/CL=F/")
     if data.status_code != 200:
         raise ValueError("Failed to fetch yahoo finance page to find chart")
