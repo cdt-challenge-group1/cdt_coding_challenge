@@ -16,7 +16,7 @@ def requestData(daysAgo=None):
     url = "https://www.eia.gov/dnav/pet/hist_xls/RWTCd.xls"
     # url2 = "https://uk.investing.com/commodities/crude-oil-historical-data"
     agoDate = None
-    if daysAgo is None:
+    if daysAgo is not None:
         agoDate = datetime.datetime.now() -\
                   datetime.timedelta(days=daysAgo)
 

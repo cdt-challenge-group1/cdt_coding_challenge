@@ -10,7 +10,7 @@ def get_quandl_data(daysAgo=None):
     url = "https://www.quandl.com/api/v3/datasets/EIA/PET_RWTC_D\
             .csv?api_key=2Q1jAB4TAk3a2pKq925R"
 
-    if daysAgo is None and daysAgo > 0:
+    if daysAgo is None or daysAgo > 0:
         today = pd.datetime.today()
         agoDate = today - BDay(daysAgo + 1)
         fromDate = str(agoDate.date())

@@ -46,8 +46,8 @@ if __name__ == "__main__":
                          r"Tomorrow's prediction=%.2f" %
                          price_prediction, advice))
 
-    errors = ([0] * (len(prices[0]) - len(predicted_stdevs)))
-    + predicted_stdevs
+    errors = ([0] * (len(prices[0]) - len(predicted_stdevs)))\
+        + predicted_stdevs
     fig = plt.figure(figsize=(10, 5))
     # print([x.strftime("%Y-%m-%d") for x in xs[-10:]])
     plt.errorbar([x.strftime("%Y-%m-%d") for x in xs[-10:]], ys[-10:],

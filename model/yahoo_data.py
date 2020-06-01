@@ -30,9 +30,10 @@ def get_yahoo_data(daysAgo=None):
         # might change their api to stop us at some point
         daysAgo = 10000000
     yahoo_url = "https://query1.finance.yahoo.com/v8/finance/chart/%s\
-            ?region=GB&lang=en-US&includePrePost=false&interval=1d&\
-            range=%dd&.tsrc=finance" % (yahoo_base_chart_url, daysAgo)
+?region=GB&lang=en-US&includePrePost=false&interval=1d&\
+range=%dd&.tsrc=finance" % (yahoo_base_chart_url, daysAgo)
 
+    print(yahoo_url)
     data = requests.get(yahoo_url)
     print(data.status_code)
     if data.status_code != 200:
