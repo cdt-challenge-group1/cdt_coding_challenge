@@ -1,0 +1,14 @@
+dist: bionic
+language: python
+python:
+  - "3.6"
+# command to install dependencies
+install:
+  - pip install -r model/requirements.txt
+# command to run tests
+script:
+  - pytest --cov=./model model/tests
+  - pycodestyle model/
+  
+after_success:
+  - codecov

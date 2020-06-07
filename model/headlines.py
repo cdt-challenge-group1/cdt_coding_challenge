@@ -1,12 +1,13 @@
 from newsapi import NewsApiClient
 import nltk
-#nltk.download('vader_lexicon')
+# nltk.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from datetime import datetime, timedelta
 
+
 def add_headlines(new_headlines, date, current_headlines):
     for article in new_headlines['articles']:
-        if article['description'] == None:
+        if article['description'] is None:
             description = ''
         else:
             description = article['description']
@@ -34,7 +35,9 @@ def collect_and_analyse_headlines():
     date = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
 
     for topic in topics_to_search:
-        headlines = newsapi.get_everything(qintitle=topic, language='en', from_param=date, to=date)
+        headlines = newsapi.get_everything(qintitle=topic,
+                                           language='en',
+                                           from_param=date, to=date)
         headlines_today = add_headlines(headlines, date, headlines_today)
 
     sid = SentimentIntensityAnalyzer()
