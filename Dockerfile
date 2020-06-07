@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:18.04
 EXPOSE 80
 
 RUN apt-get update && \
