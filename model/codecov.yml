@@ -1,4 +1,4 @@
 ignore:
-  dock_advice.py
-  headlines.py
-  quandl_data.py
+  - "dock_advice.py"
+  - "headlines.py"
+  - "quandl_data.py"
