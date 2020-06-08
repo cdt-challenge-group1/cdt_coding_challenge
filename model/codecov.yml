@@ -1,4 +1,4 @@
 ignore:
-  model/dock_advice.py
-  model/headlines.py
-  model/quandl_data.py
+  dock_advice.py
+  headlines.py
+  quandl_data.py
