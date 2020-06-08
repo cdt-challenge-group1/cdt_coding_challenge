@@ -1,4 +1,0 @@
-ignore:
-  model/dock_advice.py
-  model/headlines.py
-  model/quandl_data.py
